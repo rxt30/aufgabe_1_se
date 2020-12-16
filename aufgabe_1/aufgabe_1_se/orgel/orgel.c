@@ -45,8 +45,9 @@ ISR (INT1_vect){
 }
 
 int main(){
-    init(6,true);
-    specificInit();
+    outputInit(6);
+    interruptInit();
+    timerInit(false,0x00,256);
     while(1){
         mainloop();
     }
