@@ -18,6 +18,6 @@
 void outputInit(int);
 void interruptInit();
 void serialInit();
-void pwmInit();
 void timerInit(bool,int,int);
+void pwmInit(bool);
 #endif

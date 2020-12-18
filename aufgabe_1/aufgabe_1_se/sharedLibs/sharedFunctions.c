@@ -10,7 +10,7 @@ void outputInit(int numberOfOutputs){
             SET_BIT(DDRC,outputsArray[i]);
         }
     }
-}
+} 
 
 /*Only Works for Interrupts on DDD2 & DDD3
  * Reacts to each voltage change.*/
@@ -37,6 +37,7 @@ void serialInit(){
     sei();
 } 
 
+/*------Init functions for Timer-------*/
 void setPrescaler(int preScaler,volatile uint8_t *port){
     if(preScaler >= 256) SET_BIT(*port,2);
     if(preScaler <= 64) SET_BIT(*port,1);
@@ -71,5 +72,41 @@ void timerInit(bool highTimer,int ocrValue,int preScaler){
     }else{
         timer8bit(ocrValue,preScaler);
     }
+    sei();
+}
+/*--------- END ---------*/
+    
+/*----------Init Functions For pwm-----------*/
+void pwmInputInit(bool highResolution){
+    ADMUX = 7;
+    ADCSRB = 0;
+
+    SET_BIT(ADMUX,REFS0);
+    if(highResolution){
+        CLEAR_BIT(ADMUX,ADLAR);
+    }else{
+        SET_BIT(ADMUX,ADLAR);
+    }
+    int presets[] = {ADPS0,ADPS1,ADATE,ADEN,ADIE,ADSC};
+    for(int i = 0; i < ARRAY_SIZE(presets);i++){
+        SET_BIT(ADCSRA,presets[i]);
+    }
+}
+
+void pwmOutputInit(){
+    SET_BIT(DDRD,DDD6);
+    OCR0A = 128;
+
+    int presets[] = {COM0A1,WGM01,WGM00};
+    for(int i = 0; i < ARRAY_SIZE(presets);i++){
+        SET_BIT(TCCR0A,presets[i]);
+    }
+
+    SET_BIT(TCCR0B,CS01);
+}
+
+void pwmInit(bool highResolution){
+    pwmInputInit(highResolution);
+    pwmOutputInit();
     sei();
 }
