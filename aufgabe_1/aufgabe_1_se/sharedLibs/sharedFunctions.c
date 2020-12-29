@@ -1,5 +1,11 @@
 #include "sharedFunctions.h"
 
+/* Set a specicific number of Ports to outputs
+ * Starts with PB0-PB4, then PC0-PC5
+ * Arguments:
+ * numberOfOutputs = Number of Ports as Output
+*/
+
 void outputInit(int numberOfOutputs){    
     int outputsArray[] = {DDB0,DDB1,DDB2,DDB3,DDB4,DDB5,DDC0,DDC1,DDC2,DDC3,DDC4,DDC5}; 
     (numberOfOutputs > 12) ? (numberOfOutputs = 12): (numberOfOutputs = numberOfOutputs);
@@ -13,7 +19,9 @@ void outputInit(int numberOfOutputs){
 } 
 
 /*Only Works for Interrupts on DDD2 & DDD3
- * Reacts to each voltage change.*/
+ * Reacts to each voltage change.
+ * Triggers the Interrrupts 'INT0_vect' and 'INT1_vect'
+*/
 void interruptInit(){
     CLEAR_BIT(DDRD,DDD2);
     CLEAR_BIT(DDRD,DDD3);
@@ -26,7 +34,10 @@ void interruptInit(){
     sei();
 }
 
-/*Enables the serial Monitor via USB*/
+/*Enables the serial Monitor via USB
+ * BAUD-RATE must be determined in the header
+ * Triggers the Interrupt 'SPI_STC_vect*
+*/
 void serialInit(){
     UBRR0H = (MYUBBR >> 8);
     UBRR0L = MYUBBR;
@@ -65,6 +76,13 @@ void timer8bit(int ocrValue,int preScaler){
     //Set Prescaler
     setPrescaler(preScaler,&TCCR0B);
 }
+/* Activates a timer with the given value and preScaler
+ * Triggers the Interrupt 'TIMER0_COMPA_vect' 
+ * Arguments:
+ * highTimer = 16bit (True) or 8bit
+ * ocrValue = Calculated Clock-Time
+ * preScaler = preScaler for ocrValue
+ */
 
 void timerInit(bool highTimer,int ocrValue,int preScaler){
     if(highTimer){
@@ -104,6 +122,13 @@ void pwmOutputInit(){
 
     SET_BIT(TCCR0B,CS01);
 }
+/* Activates a pwm-Output on PD6/OC0A
+ * and a pwm-Input on ADC7
+ * Value of output can be set by changing OCR0A
+ * Triggers interrupt 'ADC_vect'
+ * Arguments:
+ * highResolution = 16bit (true) or 8bit
+*/
 
 void pwmInit(bool highResolution){
     pwmInputInit(highResolution);
