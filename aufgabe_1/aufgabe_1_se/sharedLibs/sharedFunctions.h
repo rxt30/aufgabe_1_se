@@ -10,6 +10,7 @@
 
 #define SET_BIT(PORT,BIT) PORT |= (1<<BIT)
 #define CLEAR_BIT(PORT,BIT) PORT &= ~(1<<BIT)
+#define TOGGLE_BIT(PORT,BIT) PORT ^= (1 << BIT)
 #define ARRAY_SIZE(arr) (sizeof(arr)/sizeof((arr)[0]))
 
 #include <stdbool.h>
@@ -20,4 +21,5 @@ void interruptInit();
 void serialInit();
 void timerInit(bool,int,int);
 void pwmInit(bool);
+void pwmInputInit(bool);
 #endif
