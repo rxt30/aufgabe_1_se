@@ -5,9 +5,9 @@ volatile uint8_t currentWaterValue;
 void main(){
     currentWaterValue = 255;
     pwmInit(false);
+    deactivatePwmOutput();
     outputInit(2);
     timerInit(false,0x00,256);
-    CLEAR_BIT(TCCR0A,WGM00);
     while(1){
         if(currentWaterValue < 120){
             turnPumpOn(currentWaterValue);

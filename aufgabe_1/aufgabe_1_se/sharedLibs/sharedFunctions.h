@@ -21,5 +21,4 @@ void interruptInit();
 void serialInit();
 void timerInit(bool,int,int);
 void pwmInit(bool);
-void pwmInputInit(bool);
 #endif

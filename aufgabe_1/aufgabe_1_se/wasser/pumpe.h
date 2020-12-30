@@ -2,3 +2,4 @@
 
 void turnPumpOn(int);
 void turnPumpOff();
+void deactivatePwmOutput();
