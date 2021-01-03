@@ -4,9 +4,9 @@ volatile uint8_t currentWaterValue;
 
 void main(){
     currentWaterValue = 255;
-    pwmInit(false);
-    deactivatePwmOutput();
-    outputInit(2);
+    pwmInputInit(false);
+    pwmOutputInit(4999,64);
+    outputInit(1);
     timerInit(false,0x00,256);
     while(1){
         if(currentWaterValue < 120){
