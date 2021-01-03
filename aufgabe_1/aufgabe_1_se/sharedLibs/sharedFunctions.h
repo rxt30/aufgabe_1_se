@@ -20,5 +20,6 @@ void outputInit(int);
 void interruptInit();
 void serialInit();
 void timerInit(bool,int,int);
-void pwmInit(bool);
+void pwmInputInit(bool);
+void pwmOutputInit(int,int);
 #endif

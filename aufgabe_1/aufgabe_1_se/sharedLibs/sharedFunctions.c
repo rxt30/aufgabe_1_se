@@ -54,7 +54,6 @@ void setPrescaler(int preScaler,volatile uint8_t *port){
     if(preScaler <= 64) SET_BIT(*port,1);
     int lastBitCalc = preScaler / 64;
     if(lastBitCalc == 1 || lastBitCalc == 16) SET_BIT(*port,0);
-    SET_BIT(*port,2);
 }
 
 void timer16bit(int ocrValue, int preScaler){
@@ -95,6 +94,12 @@ void timerInit(bool highTimer,int ocrValue,int preScaler){
 /*--------- END ---------*/
     
 /*----------Init Functions For pwm-----------*/
+/*
+ * Initializes a pwm-Input on PORT ADC7
+ * Triggers the Interrupt 'ADC_vect'
+ * Arguments:
+ * highResolution = 16 bit (True) or 8bit
+ */
 void pwmInputInit(bool highResolution){
     ADMUX = 7;
     ADCSRB = 0;
@@ -109,29 +114,27 @@ void pwmInputInit(bool highResolution){
     for(int i = 0; i < ARRAY_SIZE(presets);i++){
         SET_BIT(ADCSRA,presets[i]);
     }
-}
-
-void pwmOutputInit(){
-    SET_BIT(DDRD,DDD6);
-    OCR0A = 128;
-
-    int presets[] = {COM0A1,WGM01,WGM00};
-    for(int i = 0; i < ARRAY_SIZE(presets);i++){
-        SET_BIT(TCCR0A,presets[i]);
-    }
-
-    SET_BIT(TCCR0B,CS01);
-}
-/* Activates a pwm-Output on PD6/OC0A
- * and a pwm-Input on ADC7
- * Value of output can be set by changing OCR0A
- * Triggers interrupt 'ADC_vect'
- * Arguments:
- * highResolution = 16bit (true) or 8bit
-*/
-
-void pwmInit(bool highResolution){
-    pwmInputInit(highResolution);
-    pwmOutputInit();
     sei();
+}
+/*
+ * Initializes a 16bit pwm-Ouput on PORT OC1A
+ * Uses the setPrescaler()-Function from the Timer-Block
+ * Arguments:
+ * icrValue = Value for TOP-Value
+ * preScaler = preScaler-Value
+ */
+
+void pwmOutputInit(int icrValue,int preScaler){
+    SET_BIT(DDRB,DDB1);
+    OCR1A = 0;
+    ICR1 = icrValue;
+
+    int presets[] = {COM1A1,COM1B1,WGM11};
+    for(int i = 0; i < ARRAY_SIZE(presets);i++){
+        SET_BIT(TCCR1A,presets[i]);
+    }
+    SET_BIT(TCCR1B,WGM13);
+    SET_BIT(TCCR1B,WGM12);
+
+    setPrescaler(preScaler,&TCCR1B);
 }
