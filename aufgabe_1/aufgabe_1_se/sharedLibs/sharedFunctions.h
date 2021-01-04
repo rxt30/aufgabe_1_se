@@ -22,4 +22,5 @@ void serialInit();
 void timerInit(bool,int,int);
 void pwmInputInit(bool);
 void pwmOutputInit(int,int);
-#endif
+void sendChar(char);
+void sendString(char*);

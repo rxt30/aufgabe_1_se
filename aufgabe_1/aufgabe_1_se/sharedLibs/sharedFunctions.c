@@ -137,4 +137,16 @@ void pwmOutputInit(int icrValue,int preScaler){
     SET_BIT(TCCR1B,WGM12);
 
     setPrescaler(preScaler,&TCCR1B);
+
+}
+
+void sendChar(char letter){
+	while ( !(UCSR0A & (1 << UDRE0)) );
+	UDR0 = letter;
+}
+
+void sendString(char *word) {
+	while(*word){
+		sendChar(*word++);
+	}
 }
