@@ -3,7 +3,7 @@
 #define COMPAREPIND(pin,compareNumber) (pin & (1<<compareNumber))
 
 void changeSound(int soundFrequency){
-    if(portStatus) OCR0A = 0x00;
+    if(PIND & (1<<2) && PIND & (1<<3)) OCR0A = 0x00;
     else OCR0A = soundFrequency;
 }
 
