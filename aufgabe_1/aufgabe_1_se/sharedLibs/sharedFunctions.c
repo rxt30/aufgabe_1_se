@@ -137,6 +137,7 @@ void pwmOutputInit(int icrValue,int preScaler){
     SET_BIT(TCCR1B,WGM12);
 
     setPrescaler(preScaler,&TCCR1B);
+
 }
 
 void sendChar(char letter){
