@@ -1,15 +1,26 @@
 #include "../sharedLibs/sharedFunctions.h"
 #include <stdlib.h>				// needed for itoa function
 
-#define F_CPU 16000000UL
-#define BAUD 9600
-#define MYUBRR F_CPU/16/BAUD -1
+volatile uint16_t ADCvalue[2] = {0};
+volatile uint16_t ADCvalueBefore[2] = {0};
+volatile uint16_t ADCvalueNow;
 
-volatile uint16_t ADCvalue;
-volatile uint16_t ADCvalueBefore0;
-volatile uint16_t ADCvalueBefore1;
-volatile uint16_t ADCvalue0;
-volatile uint16_t ADCvalue1;
+
+void printSerial(int poti){
+	char bufferValue[5];
+	char bufferPoti[5];
+	if(ADCvalueBefore[poti] != ADCvalue[poti]){
+		ADCvalueBefore[poti] = ADCvalue[poti];
+		itoa(ADCvalue[poti],bufferValue,10);
+		itoa(poti,bufferPoti,10);
+		sendString("Poti ");
+		sendString(bufferPoti);
+		sendString(": ");
+		sendString(bufferValue);
+		sendString("\r\n");
+	}
+}
+
 
 int main(void) {
 	serialInit();
@@ -30,23 +41,9 @@ int main(void) {
 
 	ADCSRA |= (1 << ADSC);    // Start the ADC conversion
 
-
 	while (1){
-		char buffer[5];
-		if(ADCvalueBefore0 != ADCvalue0){
-			ADCvalueBefore0 = ADCvalue0;
-			itoa(ADCvalue0,buffer,10);
-			sendString("Poti 0: ");
-			sendString(buffer);
-			sendString("\r\n");
-		}
-		if(ADCvalueBefore1 != ADCvalue1){
-			ADCvalueBefore1 = ADCvalue1;
-			itoa(ADCvalue1,buffer,10);
-			sendString("Poti 1: ");
-			sendString(buffer);
-			sendString("\r\n");
-		}
+		printSerial(0);
+		printSerial(1);
 	}
 }
 
@@ -57,18 +54,13 @@ ISR(ADC_vect) {
 	tmp = ADMUX;            // read the value of ADMUX register
 	tmp &= 0x0F;            // AND the first 4 bits (value of ADC pin being used)
 
-	ADCvalue = ADCH;        // read the sensor value
+	ADCvalueNow = ADCH;     // read the sensor value
 
 	if (tmp == 0){
-		ADCvalue0 = ADCvalue;
+		ADCvalue[0] = ADCvalueNow;
 		ADMUX++;            // add 1 to ADMUX to go to the next sensor
 	}else if (tmp == 1){
-		ADCvalue1 = ADCvalue;
+		ADCvalue[1] = ADCvalueNow;
 		ADMUX &= 0xF8;      // clear the last 4 bits to reset the mux to ADC0
 	}
-	
-	// REMEMBER: once ADCH is read the ADC will update
-	
-	// if you need the value of ADCH in multiple spots, read it into a register
-	// and use the register and not the ADCH
 }
