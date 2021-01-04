@@ -1,51 +1,23 @@
-#include "../sharedLibs/sharedFunctions.h"
-#define CHANGESOUND(PORT,BIT) PORT = BIT
-#define TOGGLE_BIT(PORT,BIT) PORT ^= (1 << BIT)
-
-void specificInit(){
-    // Set the Timer Mode to CTC
-    TCCR0A |= (1 << WGM01);
-
-    // Set the value that you want to count to
-    OCR0A = 0x00;
-
-    TIMSK0 |= (1 << OCIE0A);    //Set the ISR COMPA vect
-
-    sei();         //enable interrupts
-
-
-    TCCR0B |= (1 << CS02);
-    // set prescaler to 256 and start the timer
-}
-
-void mainloop(){
-}
+#include "soundChange.h"
+volatile int interruptDetected;
 
 ISR (TIMER0_COMPA_vect){
     TOGGLE_BIT(PORTB,PORTB0);
 }
 
 ISR (INT0_vect){
-    if(PIND & (1<<2)){
-        OCR0A = 0x00;
-    }else{
-        OCR0A = 0x46;
-    }
+    interruptDetected = 1;
     CLEAR_BIT(PORTB,PORTB5);
 }
 
 
 ISR (INT1_vect){
-    if(PIND & (1<<3)){
-        OCR0A = 0x00;
-    }else{
-        OCR0A = 0xF3;
-    }
+    interruptDetected = 2;
     SET_BIT(PORTB,PORTB5);
 }
 
 int main(){
-    outputInit(6);
+    outputInit(2);
     interruptInit();
     timerInit(false,0x00,256);
     while(1){

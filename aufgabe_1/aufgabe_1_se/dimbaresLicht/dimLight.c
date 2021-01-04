@@ -4,10 +4,11 @@ volatile uint8_t ADCvalue;
 volatile uint8_t oldValue;
 
 void main(){
-    pwmInit(false);
+    pwmInputInit(false);
+    pwmOutputInit(255,256);
     while(1){
         if(ADCvalue != oldValue){
-            OCR0A = ADCvalue;
+            OCR1A = ADCvalue;
             oldValue = ADCvalue;
         }
     }
