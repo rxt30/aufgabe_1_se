@@ -110,7 +110,7 @@ void pwmInputInit(bool highResolution){
     }else{
         SET_BIT(ADMUX,ADLAR);
     }
-    int presets[] = {ADPS0,ADPS1,ADATE,ADEN,ADIE,ADSC};
+    int presets[] = {ADPS0,ADPS1,ADPS2,ADATE,ADEN,ADIE,ADSC};
     for(int i = 0; i < ARRAY_SIZE(presets);i++){
         SET_BIT(ADCSRA,presets[i]);
     }
