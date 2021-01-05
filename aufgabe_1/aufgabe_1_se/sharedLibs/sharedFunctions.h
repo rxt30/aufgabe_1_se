@@ -24,3 +24,4 @@ void pwmInputInit(bool);
 void pwmOutputInit(int,int);
 void sendChar(char);
 void sendString(char*);
+#endif
