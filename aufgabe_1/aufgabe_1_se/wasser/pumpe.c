@@ -4,19 +4,13 @@ void notificationSound(int currentWaterValue){
     else OCR0A = 0x00;
 }
 
-void cycleServoEngine(){
-    if(OCR1A == 97) OCR1A = 535;
-    else OCR1A = 97;
-}
-
 void turnPumpOn(int currentWaterValue){
-    SET_BIT(PORTB,PORTB1);
     notificationSound(currentWaterValue);
-    cycleServoEngine();
+    OCR1A = 535;
 }
 
 
 void turnPumpOff(){
-    CLEAR_BIT(PORTB,PORTB1);
     OCR0A = 0x00;
+    OCR1A = 97;
 }
