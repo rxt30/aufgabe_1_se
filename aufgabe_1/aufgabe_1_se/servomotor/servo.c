@@ -1,4 +1,4 @@
-# include "sharedFunctions.h"
+#include "../sharedLibs/sharedFunctions.h"
 ISR (INT0_vect){
 	OCR1A = 97;
 }
