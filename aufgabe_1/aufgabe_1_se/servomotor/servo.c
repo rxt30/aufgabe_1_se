@@ -1,0 +1,15 @@
+# include "sharedFunctions.h"
+ISR (INT0_vect){
+	OCR1A = 97;
+}
+ISR (INT1_vect){
+	OCR1A = 535;
+}
+
+	void main(){
+		interruptInit();
+		 pwmOutputInit(4999,64);
+	
+		while (1){
+		}
+	}
