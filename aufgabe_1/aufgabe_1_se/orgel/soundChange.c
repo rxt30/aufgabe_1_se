@@ -3,14 +3,21 @@
 #define COMPAREPIND(pin,compareNumber) (pin & (1<<compareNumber))
 
 void changeSound(int soundFrequency){
-    if(PIND & (1<<2) && PIND & (1<<3)) OCR0A = 0x00;
-    else OCR0A = soundFrequency;
+    OCR0A = soundFrequency;
+}
+
+void changeSoundonLastInterrupt(){
+    if(interruptDetected == 1) changeSound(0x46);
+    else changeSound(0xF3);
 }
 
 void mainloop(){
-    if(interruptDetected != 0){
-        if(interruptDetected == 1) changeSound(0x46);
-        else changeSound(0xF3);
-        interruptDetected = 0;
-}
+    //Needed to prevent weird soundChanges
+    int tmp = portOff1 | portOff2;
+    switch(tmp){
+        case 0: changeSoundonLastInterrupt();break;
+        case 4: changeSound(0xF3);break;
+        case 8: changeSound(0x46);break;
+        default: changeSound(0x00);
+    }
 }
