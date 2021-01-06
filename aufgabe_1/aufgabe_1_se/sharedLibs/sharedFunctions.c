@@ -7,8 +7,8 @@
 */
 
 void outputInit(int numberOfOutputs){    
-    int outputsArray[] = {DDB0,DDB1,DDB2,DDB3,DDB4,DDB5,DDC0,DDC1,DDC2,DDC3,DDC4,DDC5}; 
-    (numberOfOutputs > 12) ? (numberOfOutputs = 12): (numberOfOutputs = numberOfOutputs);
+    int outputsArray[] = {DDB0,DDB1,DDB2,DDB3,DDB4,DDB5,DDC0,DDC1,DDC2,DDC3,DDC4,DDC5,DDD4,DDD5}; 
+    (numberOfOutputs > 14) ? (numberOfOutputs = 14): (numberOfOutputs = numberOfOutputs);
     for(int i = 0; i < numberOfOutputs;i++){
         if(i < 6){
             SET_BIT(DDRB,outputsArray[i]);
