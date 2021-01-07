@@ -13,11 +13,7 @@ void printSerial(int poti){
 		ADCvalueBefore[poti] = ADCvalue[poti];
 		itoa(ADCvalue[poti],bufferValue,10);
 		itoa(poti,bufferPoti,10);
-		sendString("Poti ");
-		sendString(bufferPoti);
-		sendString(": ");
-		sendString(bufferValue);
-		sendString("\r\n");
+        sendString("Poti %s: %s \r\n",bufferPoti,bufferValue);
 	}
 }
 
