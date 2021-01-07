@@ -7,13 +7,9 @@ void main(){
     pwmInputInit(false);
     pwmOutputInit(255,256);
     while(1){
-        if(ADCvalue != oldValue){
-            OCR1A = ADCvalue;
-            oldValue = ADCvalue;
-        }
     }
 }
 
 ISR(ADC_vect){
-    ADCvalue = ADCH;
+    OCR1A = ADCH;
 }
