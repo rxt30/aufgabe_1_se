@@ -1,7 +1,5 @@
 #include "soundChange.h"
 
-#define COMPAREPIND(pin,compareNumber) (pin & (1<<compareNumber))
-
 void changeSound(int soundFrequency){
     OCR0A = soundFrequency;
 }
