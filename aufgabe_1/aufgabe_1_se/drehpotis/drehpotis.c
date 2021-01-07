@@ -1,5 +1,6 @@
 #include "../sharedLibs/sharedFunctions.h"
 #include <stdlib.h>				// needed for itoa function
+#include <stdio.h>
 
 volatile uint16_t ADCvalue[2] = {0};
 volatile uint16_t ADCvalueBefore[2] = {0};
@@ -13,7 +14,9 @@ void printSerial(int poti){
 		ADCvalueBefore[poti] = ADCvalue[poti];
 		itoa(ADCvalue[poti],bufferValue,10);
 		itoa(poti,bufferPoti,10);
-        sendString("Poti %s: %s \r\n",bufferPoti,bufferValue);
+        char serialOutput[50];
+        sprintf(serialOutput,"Poti %s: %s\r\n",bufferPoti,bufferValue);
+        sendString(serialOutput);
 	}
 }
 
